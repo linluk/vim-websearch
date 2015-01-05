@@ -7,22 +7,11 @@ variables:
 
   variable name        | possible values      | info
   ---------------------|----------------------|-------------------------------
-  g:web_search_engine  | "google", "duckduck" | choose your search engine
-                       |                      | default: "duckduck"
+  g:web_search_engine  | "google", "duckduck" | choose your search engine. default: "duckduck"
+  g:web_search_query   | any string           | if set g:web_search_engine has no effect. your search term will be added to this. no default.
+  g:web_search_browser | "lynx", "chromium"   | choose your browser. default: "lynx"
   ---------------------|----------------------|-------------------------------
-  g:web_search_query   | any string           | if set g:web_search_engine has
-                       |                      | no effect.
-                       |                      | your search term will be added
-                       |                      | to this.
-                       |                      | no default.
-  ---------------------|----------------------|-------------------------------
-  g:web_search_browser | "lynx", "chromium"   | choose your browser
-                       |                      | default: "lynx"
-  ---------------------|----------------------|-------------------------------
-  g:web_search_command | any string           | if set g:web_search_browser
-                       |                      | has no effect.
-                       |                      | your favorite browser.
-                       |                      | no default.
+  g:web_search_command | any string           | if set g:web_search_browser has no effect. your favorite browser. no default.
 
 the default is to search in duckduckgo with lynx.
 to use f.e. firefox with yahoo put this in your .vimrc:
