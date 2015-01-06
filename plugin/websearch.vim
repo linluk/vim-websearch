@@ -1,49 +1,12 @@
-" Description {{{1
+" Comment {{{1
 " Author: linluk  'lukas42singer (at) gmail (dot) com'
-" Created: 2014/01/05
+" Created: 2015/01/05
 " Filename: websearch.vim
-"
-" opens a browser and searches the web.
-"
-" variables:
-"
-"  variable name        | possible values      | info
-"  ---------------------+----------------------+-------------------------------
-"  g:web_search_engine  | "google", "duckduck" | choose your search engine
-"                       |                      | default: "duckduck"
-"  ---------------------+----------------------+-------------------------------
-"  g:web_search_query   | any string           | if set g:web_search_engine has
-"                       |                      | no effect.
-"                       |                      | your search term will be added
-"                       |                      | to this.
-"                       |                      | no default.
-"  ---------------------+----------------------+-------------------------------
-"  g:web_search_browser | "lynx", "chromium"   | choose your browser
-"                       |                      | default: "lynx"
-"  ---------------------+----------------------+-------------------------------
-"  g:web_search_command | any string           | if set g:web_search_browser
-"                       |                      | has no effect.
-"                       |                      | your favorite browser.
-"                       |                      | no default.
-"
-" the default is to search in duckduckgo with lynx.
-" to use f.e. firefox with yahoo put this in your .vimrc:
-"   let g:web_search_command = "firefox"
-"   let g:web_search_query = "https://search.yahoo.com/search;?p="
-"
-" to use f.e. chromium with google put this in your .vimrc:
-"   let g:web_search_engine = "google"
-"   let g:web_search_browser = "chromium"
-"
-" here are some possible mappings:
-"   " search for word under cursor in normal mode
-"   nnoremap <leader>w :WebSearchCursor<CR>
-"   " search for selection in visual mode
-"   vnoremap <leader>w :WebSearchVisual<CR>
-"
+" License: Copyright (C) 2015 Lukas Singer
+"          GNU GPL v3 see <LICENSE> for more info.
 " TODOs:
-"   use a dictionary for g:web_search_engine and g:web_search_command
-"   mapping. (i have to learn it first)
+"   use a dictionary (or similar)for g:web_search_engine and
+"   g:web_search_command mapping. (i have to learn about it first)
 "
 "   add more search engines.
 "
@@ -53,19 +16,83 @@
 "
 "   test!
 "
+" Changes:
+"   2015/01/06, linluk:
+"     added a default mapping. turned on by:
+"       let g:web_search_use_default_mapping = "yes"
+"     in your vimrc file.
+"     deleted most of the header-comment
+"     (this stuff can be found in README.md).
+"
 
 " Loaded? {{{1
-if has("g:web_search_loaded")
+if exists("g:web_search_loaded")
   finish
 endif
 let g:web_search_loaded = 1
 
 " Commands {{{1
+" :WebSearch needs one or more arguments
 command! -nargs=+ WebSearch call DoWebSearch(join([<f-args>]))
+" :WebSearchCursor didn't take any arguments
 command! WebSearchCursor call DoWebSearch('<cword>')
+" :WebSearchVisual has -range because it can be called from visual mode, range
+" is not used, i have my own function.
 command! -range WebSearchVisual call DoWebSearch(GetVisualSelection())
+" :WebSearchAbout
+command! WebSearchAbout call WebSearchAbout()
+
+" Mappings {{{1
+if exists("g:web_search_use_default_mapping")
+  if g:web_search_use_default_mapping == "yes"
+    " search for word under cursor in normal mode
+    nnoremap <leader>ws :WebSearchCursor<CR>
+    " search for selection in visual mode
+    vnoremap <leader>ws :WebSearchVisual<CR>
+  endif
+endif
 
 " Functions {{{1
+function! WebSearchAbout() "{{{2
+  echom "<vim-websearch> Copyright (C) 2015 Lukas Singer"
+  echom "This program comes with ABSOLUTELY NO WARRANTY;"
+  echom "This is free software, and you are welcome to redistribute it;"
+  echom " "
+  echom "usage:"
+  echom "  :WebSearch <search-term>        search for <search-term>"
+  echom "  :WebSearchAbout                 prints this help text"
+  echom "  :WebSearchCursor (or mapping)   search the word under cursor"
+  echom "  :WebSearchVisual (or mapping)   search for visual selection"
+  echom " "
+  echom "thanks for using vim-websearch"
+  echom "visit: <https://github.com/linluk/vim-websearch>"
+  echom " "
+  echom "your settings:"
+  if exists("g:web_search_query")
+    echom "  your search query is: " . g:web_search_query . "."
+  elseif exists("g:web_search_engine")
+    echom "  your search engine is: " . g:web_search_engine . "."
+  else
+    echom "  you use the default search engine."
+  endif
+  if exists("g:web_search_command")
+    echom "  your search command is: " . g:web_search_command . "."
+  elseif exists("g:web_search_browser")
+    echom "  your browser is: " . g:web_search_browser . "."
+  else
+    echom "  you use the default browser."
+  endif
+  if exists("g:web_search_use_default_mapping")
+    if g:web_search_use_default_mapping == "yes"
+      echom "  you use the default mapping, try <leader>ws in normal or visual mode."
+    else
+      echom "  default mappings are explicitly turned of."
+    endif
+  else
+    echom "  you don't use the default mapping."
+  end
+endfunction
+
 function! GetVisualSelection() "{{{2
   " save content of register "
   let l:tmp = @"
