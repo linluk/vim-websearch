@@ -52,9 +52,13 @@ otherwise you can create your own mappings like this:
 Usage
 =====
 type `:WebSearchAbout` in normal mode to see the about dialog.
+
 type `:WebSearch hello world` in normal mode to search for `hello world`.
+
 type `:WebSearchCursor` in normal mode to search for the word under the cursor.
+
 type `:WebSearchVisual` in visual mode to search for the selected text.
+
 instead of typing `:WebSearchCursor` and `:WebSearchVisual` i would recommend to use the default or any other mapping.
 
 Bugs? Features?
