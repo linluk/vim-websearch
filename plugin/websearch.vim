@@ -130,6 +130,9 @@ function! DoWebSearch(string) "{{{2
     " default search engine is duckduckgo
     let l:query = l:duckduck . l:term
   endif
+  if exists("g:web_search_query_suffix")
+    let l:query = l:query . g:web_search_query_suffix
+  endif
   if exists("g:web_search_browser")
     if g:web_search_browser == "lynx"
       let l:browser_cmd = l:lynx
